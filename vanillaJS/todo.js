@@ -59,7 +59,7 @@ function paintToDo(text){
 /* submit 이벤트 핸들러 함수*/
 function handleSubmit(event){
     event.preventDefault(); // submit 안되게 하고
-    const currentValue = toDoInput.value고 // input value 받아와서
+    const currentValue = toDoInput.value; // input value 받아와서
     paintToDo(currentValue); // 받아온 값을 매개변수로 보여주는 함수 호출
     toDoInput.value = ""; // input form value는 다시 초기화
 }
