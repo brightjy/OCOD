@@ -3,56 +3,80 @@ const weather = document.querySelector(".js-weather");
 const API_KEY = "690241206d8a2036131c1a5bde107e18";
 const COORDS = "coords";
 
+/* À§µµ °æµµ °ªÀ¸·Î ³¯¾¾ Á¤º¸ È£Ãâ ÇÏ´Â ÇÔ¼ö*/
 function getWeather(lat, lng){
+
+    /*
+    [Fetch API]:ES 6ÀÇ ºñµ¿±â Åë½Å ¹æ¹ı
+    fetch(url, {
+        method: 'GET',
+        headers:{
+            'Content-Type':'application/json'
+        }        
+    }).then(function(response){
+        // code...
+    }).catch(function(error){
+        // error
+        console.log(error);
+    });   
+    */
+
+    /* ³¯¾¾ API·Î ³¯¾¾ Á¤º¸ ¹Ş¾Æ¿À±â */
     fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric`
-    ).then(function(response){ // fetchê°€ ë‹¤ ë¡œë“œëœ ì´í›„ì—
-        return response.json(); // jsonì„ ë¦¬í„´
-    }).then(function(json){ // jsonì´ ë‹¤ ë¡œë“œëœ ì´í›„ì—
-        const temperature = json.main.temp;
-        const place = json.name;
-        weather.innerText = `${temperature} @${place}`;
+    ).then(function(response){ // ÀÀ´äÀ» ¹ŞÀ¸¸é
+        return response.json(); // ÀÀ´ä Áß json µ¥ÀÌÅÍ¸¦ ¸®ÅÏÇØÁà
+    }).then(function(json){ // ¸®ÅÏ ¹ŞÀº json µ¥ÀÌÅÍ¿¡¼­
+        const temperature = json.main.temp; // main.temp Á¤º¸ °¡Á®¿Í¼­ temperature¿¡ ³Ö°í
+        const place = json.name; // name Á¤º¸ °¡Á®¿Í¼­ place¿¡ ³Ö¾î
+        weather.innerText = `${temperature} @${place}`; // .js-weather¿¡ ³»¿ëÀ» ³Ö¾û
     });
 }
 
-/* localStorageì— 
-   COORDSë€ ì´ë¦„ìœ¼ë¡œ 
-   JSON í˜•íƒœì¸ ì¢Œí‘œ ë°ì´í„°ë¥¼
-   String í˜•íƒœë¡œ ë°”ê¾¸ì–´ ì €ì¥*/
+/* localStorageÀÇ
+   COORDS¿¡
+   JSON ÇüÅÂÀÇ Á¤º¸(¿©±â¼­´Â À§µµ, °æµµ ÁÂÇ¥)¸¦
+   String ½ºÆ®¸µ ÇüÅÂ·Î setItem(ÀúÀå) ÇÏ±â */
 function saveCoords(coordsObj){
     localStorage.setItem(COORDS, JSON.stringify(coordsObj));
 }
 
-function handleGeoSuccess(position){
-    const latitude = position.coords.latitude; // ìœ„ë„
-    const longitude = position.coords.longitude; // ê²½ë„
-    const coordsObj = {
+/** ÁÂÇ¥°ª °¡Á®¿À±â¿¡ ¼º°øÇÒ °æ¿ì È£ÃâµÇ´Â ÇÔ¼ö */
+function handleGeoSuccess(position){ // ¹Ş¾Æ¿Â ÁÂÇ¥°ª(position)ÀÌ ¸Å°³º¯¼ö
+    const latitude = position.coords.latitude; // ¹ŞÀº ÁÂÇ¥°ª(position)¿¡¼­ À§µµ °¡Á®¿È
+    const longitude = position.coords.longitude; // ¹ŞÀº ÁÂÇ¥°ª(position)¿¡¼­ À§µµ °¡Á®¿È
+    const coordsObj = { // °¡Á®¿Â À§µµ¿Í °æµµ´Â obj °´Ã¼·Î ¸¸µë
         /* latitude: latitude,
         longitude: longitude*/
-        latitude,
+        latitude, // name°ú °ªÀÌ °°À¸¸é ÀÌ·¸°Ô ½áµµ µÊ
         longitude
     };
-    saveCoords(coordsObj);
-    getWeather(latitude, longitude);
+    saveCoords(coordsObj); // json µ¥ÀÌÅÍ¸¦ localStorage¿¡ ÀúÀå
+    getWeather(latitude, longitude); // À§µµ °æµµ °ªÀ¸·Î ³¯¾¾ Á¤º¸ È£Ãâ
 }
 
+/** ÁÂÇ¥°ª °¡Á®¿À±â¿¡ ½ÇÆĞÇÒ °æ¿ì È£ÃâµÇ´Â ÇÔ¼ö */
 function handleGeoError(){
     console.log("Cant access geo location");
 }
 
+/** ÁÂÇ¥°ªÀ» ¾ò¾î³»´Â ÇÔ¼ö */
 function askForCoords(){
-    navigator.geolocation.getCurrentPosition(handleGeoSuccess, handleGeoError);
+    /** geolocation API : »ç¿ëÀÚÀÇ ÇöÀç À§Ä¡¸¦ °¡Á®¿Â´Ù. */
+    navigator.geolocation.getCurrentPosition(handleGeoSuccess, handleGeoError); // ÇöÀç À§Ä¡ °¡Á®¿À±â¿¡ ¼º°øÇÏ¸é ~Success È£Ãâ, ½ÇÆĞÇÏ¸é ~Error È£Ãâ
 }
 
+/* ÁÂÇ¥ ·Îµù ÇÔ¼ö */
 function loadCoords(){
-    const loadedCoords = localStorage.getItem(COORDS);
-    if(loadedCoords === null){
-        askForCoords();
-    }else{
-        const parsedCoords = JSON.parse(loadedCoords);
-        getWeather(parsedCoords.latitude, parsedCoords.longitude);
+    const loadedCoords = localStorage.getItem(COORDS); // localStorage¿¡¼­ COORDS °ªÀ» °¡Á®¿Â´Ù. -> ÇöÀç String ÇüÅÂ
+    if(loadedCoords === null){ // °¡Á®¿Â °ª(=±âÁ¸¿¡ ÀúÀåµÈ °ª)ÀÌ ¾øÀ¸¸é,
+        askForCoords(); // ÁÂÇ¥°ªÀ» ¾ò¾î³»´Â ÇÔ¼ö È£Ãâ
+    }else{ // °¡Á®¿Â °ª(=±âÁ¸¿¡ ÀúÀåµÈ °ª)ÀÌ ÀÖÀ¸¸é,
+        const parsedCoords = JSON.parse(loadedCoords); // °¡Á®¿Â String ÇüÅÂÀÇ ÁÂÇ¥°ªÀ» JSON ÇüÅÂ·Î º¯È¯ÇÏ¿© parsedCoords¿¡ ÀúÀå
+        getWeather(parsedCoords.latitude, parsedCoords.longitude); // °¡Á®¿Â À§µµ, °æµµ °ªÀ» È°¿ëÇØ getWeather ÇÔ¼ö È£Ãâ
     }
 }
 
+/* ½ÇÇàÇÔ¼ö */
 function init(){
     loadCoords();
 }
