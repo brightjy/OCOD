@@ -1,59 +1,80 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function Food({name, picture, rating}){
-  return (
-    <div>
-      <h2>I Like {name}</h2>
-      <h4>{rating}/5.0</h4>
-      <img src={picture} alt={name} />
-    </div>
-  );
-}
+/**
+ * 2020.07.28 
+ * setState를 할 때마다 react는 새로운 state와 함께 render function을 호출!
+ */
 
-Food.propTypes = {
-  name: PropTypes.string.isRequired,
-  picture: PropTypes.string.isRequired,
-  rating: PropTypes.number.isRequired
-};
 
-const foodILike = [
-  {
-    id: 1, // 유일한 key 값이 필요하다.
-    name: "GodKimchi",
-    image:
-      "https://th3.tmon.kr/thumbs/image/db0/e31/cba/73dc2c36c_700x700_95_FIT.jpg",
-    rating: 5.0 
-    },
-  {
-    id: 2, 
-    name: "Ramyun",
-    image:
-      "https://img.hankyung.com/photo/201902/AA.19048482.1.jpg",
-    rating: 4.9
-  },
-  {
-    id: 3,
-    name: "DduckboKKi",
-    image:
-      "https://funshop.akamaized.net/products/0000067786/vs_image800.jpg",
-    rating: 4.8
+class App extends React.Component{
+
+  state = {
+    isLoading: true,
+    movies: []
+  };
+  
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 6000);
   }
-];
 
-function App() {
-  return (
-    <div>
-      {foodILike.map(dish => (
-        <Food 
-          key={dish.id}  
-          name={dish.name}
-          picture={dish.image}
-          rating={dish.rating}
-          />
-      ))}
-    </div>
-  );
+  render(){
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading..." : "We are ready"}</div>;
+  }
+
+  /*
+  constructor(props){
+    super(props);
+    console.log("hello");
+  }*/
+
+  /**
+   *  state는 하나의 동적 object
+   *  바꾸고 싶은 데이터를 여기에 넣는다.
+  
+  state = { 
+    count: 0
+  };
+  */
+
+  /* 예시
+  add = () => {
+    this.setState(current => ({count: current.count + 1}));
+  };
+
+  minus = () => {
+    this.setState(current => ({count: current.count -1}));
+  };
+  */
+
+  /* constructor -> render -> componentDidMount() -> 
+     변화가 있는 경우 render -> componentDidUpdate()
+  componentDidMount(){
+    console.log("component rendered");
+  }  
+
+  componentDidUpdate(){
+    console.log("I just updated");
+  }
+  */
+
+  /**
+   * 실행하고자 하는 것을 render method에 넣는다.
+  
+  render(){ 
+    console.log("I'm rendering");
+    return (
+      <div>
+        <h1>The number is: {this.state.count}</h1>
+        <button onClick={this.add}>Add</button>
+        <button onClick={this.minus}>Minus</button>
+      </div>
+    );
+  }
+  */
+
 }
 
 export default App;
