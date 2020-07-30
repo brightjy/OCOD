@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Movie from './Movie';
+import './Movie.css';
 
 
 /**
@@ -14,75 +16,49 @@ class App extends React.Component{
     isLoading: true,
     movies: []
   };
-  
+
+  /** 
+   * 2020.07.30
+   * async, await: getMovies 호출에 시간이 걸린다고 javaScript에 말해주기 
+   * */
+  getMovies = async () => {
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    this.setState({ movies, isLoading: false });
+  };
+
   componentDidMount(){
-
-    axios.get("https://yts-proxy.now.sh/list_moives.json");
-
-    /*
-        setTimeout(() => {
-        this.setState({ isLoading: false });
-      }, 6000);
-    */
+    this.getMovies();
   }
-
 
   render(){
-    const { isLoading } = this.state;
-    return <div>{isLoading ? "Loading..." : "We are ready"}</div>;
-  }
-
-  /*
-  constructor(props){
-    super(props);
-    console.log("hello");
-  }*/
-
-  /**
-   *  state는 하나의 동적 object
-   *  바꾸고 싶은 데이터를 여기에 넣는다.
-  
-  state = { 
-    count: 0
-  };
-  */
-
-  /* 예시
-  add = () => {
-    this.setState(current => ({count: current.count + 1}));
-  };
-
-  minus = () => {
-    this.setState(current => ({count: current.count -1}));
-  };
-  */
-
-  /* constructor -> render -> componentDidMount() -> 
-     변화가 있는 경우 render -> componentDidUpdate()
-  componentDidMount(){
-    console.log("component rendered");
-  }  
-
-  componentDidUpdate(){
-    console.log("I just updated");
-  }
-  */
-
-  /**
-   * 실행하고자 하는 것을 render method에 넣는다.
-  
-  render(){ 
-    console.log("I'm rendering");
+    const { isLoading, movies } = this.state;
     return (
-      <div>
-        <h1>The number is: {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
+      <section class="container">
+        {isLoading ? (
+          <div calss="loader">
+            <span class="loader__text">Loading...</span>
+          </div> 
+        ) : (
+          <div class="movies">
+            {movies.map(movie => (
+              <Movie 
+                key={movie.id}
+                id={movie.id}
+                year={movie.year} 
+                title={movie.title} 
+                summary={movie.summary} 
+                poster={movie.medium_cover_image} 
+              />
+            ))}
+          </div>
+        )}
+      </section>
     );
   }
-  */
-
 }
 
 export default App;
