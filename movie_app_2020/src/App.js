@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Movie from './Movie';
 import './Movie.css';
+import './App.css';
 
 
 /**
@@ -39,7 +40,7 @@ class App extends React.Component{
     return (
       <section class="container">
         {isLoading ? (
-          <div calss="loader">
+          <div class="loader">
             <span class="loader__text">Loading...</span>
           </div> 
         ) : (
