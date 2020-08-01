@@ -38,13 +38,16 @@ class App extends React.Component{
   render(){
     const { isLoading, movies } = this.state;
     return (
-      <section class="container">
+      /* javascript에서 html의 class는 className이라 해줘야 한다. 
+      * class 라고 하면 class 랑 헷갈려 함
+      */
+      <section className="container">
         {isLoading ? (
-          <div class="loader">
-            <span class="loader__text">Loading...</span>
+          <div className="loader">
+            <span className="loader__text">Loading...</span>
           </div> 
         ) : (
-          <div class="movies">
+          <div className="movies">
             {movies.map(movie => (
               <Movie 
                 key={movie.id}
@@ -52,7 +55,8 @@ class App extends React.Component{
                 year={movie.year} 
                 title={movie.title} 
                 summary={movie.summary} 
-                poster={movie.medium_cover_image} 
+                poster={movie.medium_cover_image}
+                genres={movie.genres} 
               />
             ))}
           </div>
