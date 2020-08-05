@@ -29,7 +29,7 @@ function genRandom(){
 
 /* 실행 함수 */
 function init(){
-    const randomNumber = genRandom(); // 랜덤 숫자 가져와서
+    const randomNumber = getRandom(); // 랜덤 숫자 가져와서
     paintImage(randomNumber); // 그 숫자를 매개변수로 이미지 불러오기 (이미지 이름이 숫자임)
 }
 
