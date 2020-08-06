@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
 }
 
+.default {
+  background-color: #9b59b6;
+}
+
 .small {
   background-color: #3498db;
 }
