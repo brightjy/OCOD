@@ -1,0 +1,47 @@
+* {
+    margin:0 auto;
+    padding:0;
+}
+
+.btn-wrap {
+    width:600px;
+    height:480px;
+    background-color: black;
+    padding-top:30px;
+}
+
+table {
+    width:500px;
+    height:400px;
+}
+
+.js-number, .js-plus, .js-minus, .js-multiple, .js-divide, .js-equal, .js-reset {
+    width:125px;
+    height:80px;
+    line-height: 80px;
+    text-align:center;
+    border:1px solid black;
+    border-radius: 1rem;
+    margin:2px;
+    background-color: lightgray;
+}
+
+.js-reset {
+    background-color: orange;
+}
+
+.js-result {
+    width:391px;
+    border-radius: 1rem;
+    box-sizing: border-box;
+    border:1px solid white;
+    background-color: grey;
+    height:80px;
+    line-height: 80px;
+    margin:2px;
+    color:white;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: right;
+    padding-right:10px;
+}
